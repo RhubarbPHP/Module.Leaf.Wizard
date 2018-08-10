@@ -180,12 +180,12 @@ class WizardTest extends RhubarbTestCase
         /** @var WizardModel $wizardModel */
         $wizardModel = $wizard->getModelForTesting();
 
-        $stepOneData = &$wizardModel->wizardData['step1'];
-        $stepOneData['test'] = 'step 1 test data';
+        $stepOneData = &$wizardModel->steps['step1']->getModelForTesting()->stepData;
+        $stepTwoData = &$wizardModel->steps['step2']->getModelForTesting()->stepData;
 
-        $stepTwoData = $wizardModel->wizardData['step2'];
+        $stepOneData["a"] = "b";
 
-        $this->assertEquals('step 1 test data', $stepTwoData['test']);
+        $this->assertEquals('b', $stepTwoData['a']);
     }
 
     public function testWizardCanActOnStepLeavingAndLeft()

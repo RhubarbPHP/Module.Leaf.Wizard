@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.1.1
+
+Fixed:      Wizard createModel now only returns the model and sets model data in onModelCreated
+Fixed:      Broken unit test
+
 ### 1.1.0
 
 Added:      Method to share data completely between one ore more steps (see documentation)
