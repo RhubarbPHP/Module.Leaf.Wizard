@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.1.2
+Fixed:       set model steps before giving data
+
 ### 1.1.1
 
 Fixed:      Wizard createModel now only returns the model and sets model data in onModelCreated
