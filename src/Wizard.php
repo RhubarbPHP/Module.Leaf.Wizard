@@ -107,16 +107,6 @@ abstract class Wizard extends Leaf
     {
         parent::onModelCreated();
 
-        $model = $this->model;
-        $model->steps = $this->getSteps();
-        foreach ($model->steps as $stepName => $step) {
-            $bindingKey = $step->getStepDataBindingKey() ?? $stepName;
-            if (!isset($model->wizardData[$bindingKey])) {
-                $model->wizardData[$bindingKey] = [];
-            }
-            $step->setStepData($model->wizardData[$bindingKey]);
-        }
-
         $this->model->navigateToStepEvent->attachHandler(function ($stepName) {
             $this->changeStep($stepName);
         });
@@ -267,10 +257,20 @@ abstract class Wizard extends Leaf
      *
      * @see Step::getStepDataBindingKey()
      * @return WizardModel
+     * @throws \Rhubarb\Leaf\Exceptions\InvalidLeafModelException
      */
     protected function createModel()
     {
-        return new WizardModel();
+        $model = new WizardModel();
+        $model->steps = $this->getSteps();
+        foreach ($model->steps as $stepName => $step) {
+            $bindingKey = $step->getStepDataBindingKey() ?? $stepName;
+            if (!isset($model->wizardData[$bindingKey])) {
+                $model->wizardData[$bindingKey] = [];
+            }
+            $step->setStepData($model->wizardData[$bindingKey]);
+        }
+        return $model;
     }
 
     protected function &getWizardData()
