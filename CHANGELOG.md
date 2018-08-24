@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.1.4
+Fixed:      Wizard createModel now only returns the model and sets model data in onModelCreated (1.1.1 but properly)
+Changed:    onModelCreated moved below createModel
+
+### 1.1.3
+Revert:      revert #9 / 1.1.1. Unit test still fixed.
+
 ### 1.1.2
 Fixed:       set model steps before giving data
 

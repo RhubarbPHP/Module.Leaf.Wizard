@@ -103,20 +103,6 @@ abstract class Wizard extends Leaf
 
     }
 
-    protected function onModelCreated()
-    {
-        parent::onModelCreated();
-
-        $this->model->navigateToStepEvent->attachHandler(function ($stepName) {
-            $this->changeStep($stepName);
-        });
-
-        $this->loadDataFromPersistentState();
-
-        // Get the first step name as our default starting step.
-        $this->changeStep($this->getDefaultStep());
-    }
-
     /**
      * Returns the name of the step to show by default.
      *
@@ -261,16 +247,38 @@ abstract class Wizard extends Leaf
      */
     protected function createModel()
     {
-        $model = new WizardModel();
+        return new WizardModel();
+    }
+
+    protected function onModelCreated()
+    {
+        parent::onModelCreated();
+
+        $model = $this->model;
         $model->steps = $this->getSteps();
+
         foreach ($model->steps as $stepName => $step) {
             $bindingKey = $step->getStepDataBindingKey() ?? $stepName;
-            if (!isset($model->wizardData[$bindingKey])) {
-                $model->wizardData[$bindingKey] = [];
+
+            if (!isset($model->wizardData[$stepName])) {
+                if ($bindingKey != $stepName) {
+                    $model->wizardData[$stepName] = &$model->wizardData[$bindingKey];
+                } else {
+                    $model->wizardData[$stepName] = [];
+                }
             }
-            $step->setStepData($model->wizardData[$bindingKey]);
+
+            $step->setStepData($model->wizardData[$stepName]);
         }
-        return $model;
+
+        $this->model->navigateToStepEvent->attachHandler(function ($stepName) {
+            $this->changeStep($stepName);
+        });
+
+        $this->loadDataFromPersistentState();
+
+        // Get the first step name as our default starting step.
+        $this->changeStep($this->getDefaultStep());
     }
 
     protected function &getWizardData()
