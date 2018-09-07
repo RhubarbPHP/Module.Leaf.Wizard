@@ -18,7 +18,7 @@ class WizardView extends View
         foreach ($this->model->steps as $stepName => $step) {
             $bindingKey = $step->getStepDataBindingKey() ?? $stepName;
 
-            if (!isset($model->wizardData[$bindingKey])) {
+            if (!isset($this->model->wizardData[$bindingKey])) {
                 $this->model->wizardData[$bindingKey] = [];
             }
 
